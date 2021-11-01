@@ -25,7 +25,7 @@ app.post('/account', (request, response) => {
     // Não deve ser possível cadastrar uma conta com CPF já existente
     const customerAlreadyExists = customers.some(customer => customer.cpf === cpf);
 
-    if(customerAlreadyExists) {
+    if (customerAlreadyExists) {
         return response.status(400).json({ error: "Customer already exists!" });
     }
 
@@ -40,6 +40,15 @@ app.post('/account', (request, response) => {
 
     console.log(customers);
     return response.status(201).send();
+});
+
+// Deve ser possível buscar o extrato bancário do cliente
+app.get('/statement/:cpf', (request, response) => {
+    const { cpf } = request.params;
+
+    const customer = customers.find(customer => customer.cpf === cpf);
+
+    return response.json(customer.statement);
 });
 
 app.listen(port, () => {
