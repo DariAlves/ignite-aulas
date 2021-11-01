@@ -20,12 +20,19 @@ const customers = []
 */
 app.post('/account', (request, response) => {
     const { cpf, name } = request.body;
-    const id = uuidV4();
+    // const id = uuidV4();
+
+    // Não deve ser possível cadastrar uma conta com CPF já existente
+    const customerAlreadyExists = customers.some(customer => customer.cpf === cpf);
+
+    if(customerAlreadyExists) {
+        return response.status(400).json({ error: "Customer already exists!" });
+    }
 
     const newCustomer = {
         cpf,
         name,
-        id,
+        id: uuidV4(),
         statement: []
     }
 
