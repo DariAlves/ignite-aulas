@@ -43,10 +43,15 @@ app.post('/account', (request, response) => {
 });
 
 // Deve ser possível buscar o extrato bancário do cliente
-app.get('/statement/:cpf', (request, response) => {
-    const { cpf } = request.params;
+app.get('/statement', (request, response) => {
+    const { cpf } = request.headers;
 
     const customer = customers.find(customer => customer.cpf === cpf);
+
+    // Não deve ser possível buscar extrato em uma conta não existente
+    if (!customer) {
+        return response.status(400).json({ error: "Customer not found!" });
+    }
 
     return response.json(customer.statement);
 });
