@@ -58,6 +58,26 @@ app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {
     return response.json(customer.statement);
 });
 
+// Deve ser possível realizar um depósito
+app.post('/deposit', verifyIfExistsAccountCPF, (request, response) => {
+    const { description, amount } = request.body;
+
+    // Não deve ser possível fazer depósito em uma conta não existente
+
+    const { customer } = request;
+
+    const statementOperations = {
+        description,
+        amount,
+        created_at: new Date(),
+        type: 'credit'
+    }
+
+    customer.statement.push(statementOperations)
+
+    return response.status(201).send();
+});
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
