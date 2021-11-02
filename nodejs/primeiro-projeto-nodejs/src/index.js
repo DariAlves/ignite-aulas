@@ -39,7 +39,6 @@ function getBalance(statement) {
 // Deve ser possível criar uma conta
 app.post('/account', (request, response) => {
     const { cpf, name } = request.body;
-    // const id = uuidV4();
 
     // Não deve ser possível cadastrar uma conta com CPF já existente
     const customerAlreadyExists = customers.some(customer => customer.cpf === cpf);
@@ -48,14 +47,19 @@ app.post('/account', (request, response) => {
         return response.status(400).json({ error: "Customer already exists!" });
     }
 
-    const newCustomer = {
+    // const newCustomer = {
+    //     cpf,
+    //     name,
+    //     id: uuidV4(),
+    //     statement: []
+    // }
+
+    customers.push({
         cpf,
         name,
         id: uuidV4(),
         statement: []
-    }
-
-    customers.push(newCustomer);
+    });
 
     return response.status(201).send();
 });
@@ -138,6 +142,25 @@ app.get('/account', verifyIfExistsAccountCPF, (request, response) => {
     const { customer }= request;
 
     return response.json(customer);
+});
+
+// Deve ser possível deletar uma conta
+app.delete('/account', verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request;
+
+    // splice
+    customers.splice(customers.indexOf(customer), 1);
+
+    return response.status(200).json(customers);
+});
+
+// Deve ser possível retornar o balance
+app.get('/balance', verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request;
+
+    const balance = getBalance(customer.statement);
+
+    return response.json(balance);
 });
 
 app.listen(port, () => {
