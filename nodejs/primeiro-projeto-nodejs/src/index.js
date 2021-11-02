@@ -9,15 +9,22 @@ const port = process.env.PORT || 3333;
 // Array de clientes
 const customers = []
 
+// Middleware
+function verifyIfExistsAccountCPF(request, response, next) {
+    const { cpf } = request.headers;
 
+    const customer = customers.find(customer => customer.cpf === cpf);
+
+    if (!customer) {
+        return response.status(400).json({ error: "Customer not found!" });
+    }
+
+    request.customer = customer;
+
+    return next();
+}
 
 // Deve ser possível criar uma conta
-/*
-    * cpf - string
-    * name - string
-    * id - uuid
-    * statement - []
-*/
 app.post('/account', (request, response) => {
     const { cpf, name } = request.body;
     // const id = uuidV4();
@@ -38,20 +45,15 @@ app.post('/account', (request, response) => {
 
     customers.push(newCustomer);
 
-    console.log(customers);
     return response.status(201).send();
 });
 
+// app.use(verifyIfExistsAccountCPF);
+
 // Deve ser possível buscar o extrato bancário do cliente
-app.get('/statement', (request, response) => {
-    const { cpf } = request.headers;
-
-    const customer = customers.find(customer => customer.cpf === cpf);
-
+app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {
     // Não deve ser possível buscar extrato em uma conta não existente
-    if (!customer) {
-        return response.status(400).json({ error: "Customer not found!" });
-    }
+    const { customer } = request;
 
     return response.json(customer.statement);
 });
