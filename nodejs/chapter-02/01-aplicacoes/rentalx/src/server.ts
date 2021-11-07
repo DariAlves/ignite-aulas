@@ -1,19 +1,14 @@
 import express from 'express';
 
-const app = express();
+import { categoriesRoutes } from './routes/categories.routes';
 
-app.use(express.json());
+const app = express();
 
 const port = process.env.PORT || 3333;
 
-app.get('', (request, response) => {
-  return response.json({ message: 'Hello, World!' });
-});
+app.use(express.json());
 
-app.post('/courses', (request, response) => {
-  const { name } = request.body;
-  return response.json({ name });
-});
+app.use(categoriesRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}!`);
