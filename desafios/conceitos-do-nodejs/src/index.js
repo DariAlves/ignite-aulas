@@ -16,7 +16,7 @@ function checksExistsUserAccount(request, response, next) {
   const user = users.find(user => user.username === username);
 
   if (!user) {
-    return response.status(404).json({ error: "User does not exist!" });
+    return response.status(404).json({ error: "User does not exists!" });
   }
 
   request.user = user;
@@ -77,7 +77,7 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
   const todo = user.todos.find(todo  => todo.id === id);
 
   if (!todo) {
-    return response.status(404).json({ error: "Todo does not exist!" });
+    return response.status(404).json({ error: "Todo does not exists!" });
   }
 
   todo.title = title;
@@ -94,7 +94,7 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
   const todo = user.todos.find(todo  => todo.id === id);
 
   if (!todo) {
-    return response.status(404).json({ error: "Todo does not exist!" });
+    return response.status(404).json({ error: "Todo does not exists!" });
   }
 
   todo.done = true;
@@ -109,7 +109,7 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   const todo = user.todos.find(todo  => todo.id === id);
 
   if (!todo) {
-    return response.status(404).json({ error: "Todo does not exist!" });
+    return response.status(404).json({ error: "Todo does not exists!" });
   }
 
   const todoIndex = user.todos.indexOf(todo);
