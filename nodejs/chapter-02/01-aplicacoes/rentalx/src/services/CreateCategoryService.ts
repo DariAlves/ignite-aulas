@@ -1,5 +1,6 @@
 import { CategoriesRepository } from '../repositories/CategoriesRepository';
 
+// Category Service
 interface IRequest {
   name: string;
   description: string;
