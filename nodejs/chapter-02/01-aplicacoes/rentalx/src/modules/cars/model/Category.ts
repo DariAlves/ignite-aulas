@@ -2,8 +2,11 @@ import { v4 as uuidV4 } from 'uuid';
 
 class Category {
   id?: string;
+
   name: string;
+
   description: string;
+
   created_at: Date;
 
   // A responsabilidade de criar o Id passa a ser da classe
